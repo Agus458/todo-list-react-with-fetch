@@ -1,22 +1,24 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import TasksList from "./TasksList";
+import TaskInput from "./TaskInput";
+import TodoFooter from "./TodoFooter";
 
 export function Home() {
-	const [task, setTask] = useState("");
 	const [tasksList, setTasksList] = useState([]);
 	const [cantTasks, setCantTasks] = useState(0);
 
-	function addTask(event) {
-		event.preventDefault();
-		setTask("");
-		if (task != "") {
-			tasksList.push(task);
-			setCantTasks(cantTasks + 1);
-		}
+	function addTask(task) {
+		let newTask = { label: task, done: false };
+		setTasksList([...tasksList, newTask]);
+		setCantTasks(cantTasks + 1);
 	}
 
 	function removeTask(pos) {
-		tasksList.splice(pos, 1);
+		setTasksList(
+			tasksList.filter((task, index) => {
+				return index != pos;
+			})
+		);
 		setCantTasks(cantTasks - 1);
 	}
 
@@ -24,34 +26,9 @@ export function Home() {
 		<div className="container text-center">
 			<h1>todos</h1>
 			<div className="card brown shadow-lg">
-				<div className="card-body">
-					<form action="" onSubmit={addTask}>
-						<input
-							type="text"
-							className="form-control"
-							id="task"
-							placeholder={
-								tasksList.length > 0
-									? "Add a new task"
-									: "No tasks, add a task"
-							}
-							onChange={event => {
-								setTask(event.target.value);
-							}}
-							value={task}
-						/>
-					</form>
-				</div>
+				<TaskInput cantTasks={cantTasks} addTask={addTask} />
 				<TasksList tasksList={tasksList} removeFromList={removeTask} />
-				<div className="card-body">
-					<p>
-						{cantTasks === 0
-							? "You are up to date"
-							: cantTasks === 1
-							? `${cantTasks} task remaining`
-							: `${cantTasks} tasks remaining`}
-					</p>
-				</div>
+				<TodoFooter cantTasks={cantTasks} />
 			</div>
 		</div>
 	);

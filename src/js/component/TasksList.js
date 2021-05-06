@@ -9,7 +9,7 @@ export default function TasksList(props) {
 					return (
 						<li key={index} className="list-group-item">
 							<div className="row">
-								<div className="col">{task}</div>
+								<div className="col">{task.label}</div>
 								<div className="col-1 text-right">
 									<i
 										onClick={() => {
