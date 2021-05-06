@@ -9,7 +9,7 @@ export function Home() {
 	function addTask(event) {
 		event.preventDefault();
 		setTask("");
-		if (cantTasks < 8 && task != "") {
+		if (task != "") {
 			tasksList.push(task);
 			setCantTasks(cantTasks + 1);
 		}
@@ -33,7 +33,7 @@ export function Home() {
 							placeholder={
 								tasksList.length > 0
 									? "Add a new task"
-									: "There is no task"
+									: "No tasks, add a task"
 							}
 							onChange={event => {
 								setTask(event.target.value);
@@ -44,7 +44,13 @@ export function Home() {
 				</div>
 				<TasksList tasksList={tasksList} removeFromList={removeTask} />
 				<div className="card-body">
-					<p>{8 - cantTasks} remaining</p>
+					<p>
+						{cantTasks === 0
+							? "You are up to date"
+							: cantTasks === 1
+							? `${cantTasks} task remaining`
+							: `${cantTasks} tasks remaining`}
+					</p>
 				</div>
 			</div>
 		</div>
