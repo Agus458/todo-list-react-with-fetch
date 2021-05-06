@@ -1,24 +1,52 @@
-import React from "react";
+import React, { useState } from "react";
+import TasksList from "./TasksList";
 
-//include images into your bundle
-import rigoImage from "../../img/rigo-baby.jpg";
-
-//create your first component
 export function Home() {
+	const [task, setTask] = useState("");
+	const [tasksList, setTasksList] = useState([]);
+	const [cantTasks, setCantTasks] = useState(0);
+
+	function addTask(event) {
+		event.preventDefault();
+		setTask("");
+		if (cantTasks < 8 && task != "") {
+			tasksList.push(task);
+			setCantTasks(cantTasks + 1);
+		}
+	}
+
+	function removeTask(pos) {
+		tasksList.splice(pos, 1);
+		setCantTasks(cantTasks - 1);
+	}
+
 	return (
-		<div className="text-center mt-5">
-			<h1>Hello Rigo!</h1>
-			<p>
-				<img src={rigoImage} />
-			</p>
-			<a href="#" className="btn btn-success">
-				If you see this green button... bootstrap is working
-			</a>
-			<p>
-				Made by{" "}
-				<a href="http://www.4geeksacademy.com">4Geeks Academy</a>, with
-				love!
-			</p>
+		<div className="container text-center">
+			<h1>todos</h1>
+			<div className="card brown shadow-lg">
+				<div className="card-body">
+					<form action="" onSubmit={addTask}>
+						<input
+							type="text"
+							className="form-control"
+							id="task"
+							placeholder={
+								tasksList.length > 0
+									? "Add a new task"
+									: "There is no task"
+							}
+							onChange={event => {
+								setTask(event.target.value);
+							}}
+							value={task}
+						/>
+					</form>
+				</div>
+				<TasksList tasksList={tasksList} removeFromList={removeTask} />
+				<div className="card-body">
+					<p>{8 - cantTasks} remaining</p>
+				</div>
+			</div>
 		</div>
 	);
 }
